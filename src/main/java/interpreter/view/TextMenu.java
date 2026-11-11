@@ -62,7 +62,7 @@ public class TextMenu {
         try {
             // Rule: Each run must start from a fresh PrgState
             PrgState state = PrgState.of( selectedProgram);
-            Repository repo = new Repository(state);
+            Repository repo = new Repository(state, "log.txt");
             Controller ctrl = new Controller(repo, true); // true = display steps
 
             System.out.println("\n-- Execution Start --");

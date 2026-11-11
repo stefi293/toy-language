@@ -12,14 +12,20 @@ import interpreter.model.value.IntValue;
 import interpreter.repository.Repository;
 import interpreter.view.Examples;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
+    @TempDir
+    Path dir;
 
-    private static PrgState run(IStmt program) throws MyException {
-        PrgState state = PrgState.of( program);
-        new Controller(new Repository(state), false).allStep(); // display off during testing
+    private PrgState run(IStmt program) throws MyException {
+        PrgState state = PrgState.of(program);
+        var repo = new Repository(state, dir.resolve("log.txt").toString());
+        new Controller(repo, false).allStep();
         return state;
     }
 
@@ -50,7 +56,7 @@ class ControllerTest {
     @Test
     void oneStepOnEmptyStackThrowsException() {
         PrgState state = PrgState.of( new NopStmt());
-        Controller ctrl = new Controller(new Repository(state), false);
+        Controller ctrl = new Controller(new Repository(state, "log.txt"), false);
 
         try {
             // Pop the initial NopStmt to empty the stack
@@ -60,5 +66,19 @@ class ControllerTest {
         } catch (MyException e) {
             fail("The first valid step should not have thrown an exception.");
         }
+    }
+
+    @Test
+    void logFileContainsTheFourSectionsInOrder() throws Exception {
+        run(Examples.EX1);
+        String log = Files.readString(dir.resolve("log.txt"));
+
+        int a = log.indexOf("ExeStack:");
+        int b = log.indexOf("SymTable:");
+        int c = log.indexOf("Out:");
+        int d = log.indexOf("FileTable:");
+
+        assertTrue(0 <= a && a < b && b < c && c < d,
+                "Log file is missing sections or they are in the wrong order.");
     }
 }

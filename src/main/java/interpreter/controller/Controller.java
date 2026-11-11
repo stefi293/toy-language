@@ -27,17 +27,16 @@ public class Controller {
 
     public void allStep() throws MyException {
         PrgState prg = repo.getCrtPrg();
+        repo.logPrgStateExec();
 
-        // Print the initial state before any execution steps
         if (displayFlag) {
             display(prg);
         }
 
         while (!prg.getExeStack().isEmpty()) {
             oneStep(prg);
-            if (displayFlag) {
-                display(prg);
-            }
+            repo.logPrgStateExec();
+            display(prg);
         }
     }
 
