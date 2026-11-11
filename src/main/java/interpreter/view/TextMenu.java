@@ -61,7 +61,7 @@ public class TextMenu {
 
         try {
             // Rule: Each run must start from a fresh PrgState
-            PrgState state = new PrgState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), selectedProgram);
+            PrgState state = PrgState.of( selectedProgram);
             Repository repo = new Repository(state);
             Controller ctrl = new Controller(repo, true); // true = display steps
 

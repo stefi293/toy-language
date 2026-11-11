@@ -23,7 +23,7 @@ class StmtTest {
     @BeforeEach
     void setUp() {
         // Create a fresh state with a dummy initial statement
-        state = new PrgState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), new NopStmt());
+        state = PrgState.of( new NopStmt());
         // Pop the dummy statement to leave a clean stack for our tests
         try {
             state.getExeStack().pop();
