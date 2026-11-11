@@ -37,6 +37,7 @@ public class PrgState {
 
     public IStack<IStmt> getExeStack() { return exeStack; }
     public IDictionary<String, IValue> getSymTable() { return symTable; }
+    public IDictionary<StringValue, BufferedReader> getFileTable() { return fileTable; }
     public IList<IValue> getOut() { return out; }
     public IStmt getOriginalProgram() { return originalProgram; }
 
